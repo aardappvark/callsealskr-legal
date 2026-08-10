@@ -40,7 +40,7 @@
 
         <h2>1. Overview</h2>
         <p>CallSealSkr ("the App") is published by MidMightBit Games, based in Melbourne, VIC, Australia. The App is a communication verification tool for the Solana Seeker device. It monitors phone calls and SMS messages, creates SHA-256 hashes of communication metadata, and records those hashes on the Solana blockchain as immutable proof that a communication occurred.</p>
-        <p>CallSealSkr is built with privacy as a core principle. We operate no servers, we do not use analytics or tracking services, we do not store data in the cloud, and we do not serve advertisements. Everything the App records stays on your device; the only data that leaves it is your wallet's public address, sent to a public Solana RPC provider when you check SGT status, pay, or restore a purchase (see section 9).</p>
+        <p>CallSealSkr is built with privacy as a core principle. We store no communication data in the cloud, we use no third-party analytics or tracking SDKs, and we serve no advertisements. Everything the App records stays on your device. Only two things ever leave it: your wallet's public address, sent to a public Solana RPC provider when you check SGT status, pay, or restore a purchase; and an anonymous, aggregate usage count &mdash; a single event name such as <code>app_open</code> with no identifier of any kind &mdash; sent to an endpoint of ours. Both are described in section 9, the analytics in section 11a, and you can switch the analytics off in Settings &gt; Privacy.</p>
         <p><strong style="color: #FF4444;">Critical Privacy Commitment:</strong> CallSealSkr never captures call audio and never transmits the content of a call or message anywhere. Nothing but a SHA-256 hash is ever sent on-chain, and that hash cannot be reversed to recover the original metadata.</p>
         <p><strong>What is stored on your device:</strong> the App keeps a local log of the communication events it observes. That log holds the phone number (unless you switch "Store phone numbers locally" off) and, for SMS, a preview consisting of the <strong>first 50 characters of the message body</strong> (unless you switch "Store SMS previews" off). Both settings are in Settings &gt; Privacy, where you can also set records to auto-delete after 7, 30 or 90 days. This data never leaves your device.</p>
 
@@ -149,8 +149,13 @@
         <h2>9. Network Requests</h2>
         <p>The App makes the following network requests:</p>
         <ul>
-            <li><strong>Solana RPC provider &mdash; <code>api.mainnet-beta.solana.com</code>:</strong> the App's only network destination. To verify Seeker Genesis Token status, fetch a recent blockhash, submit payments and hash memos, and restore purchases, the App sends your wallet's public address to this provider. The provider receives your IP address and that public address. Private keys never leave your wallet. No fallback or alternative RPC provider is used.</li>
+            <li><strong>Solana RPC provider &mdash; <code>api.mainnet-beta.solana.com</code>:</strong> one of the App&rsquo;s two network destinations. To verify Seeker Genesis Token status, fetch a recent blockhash, submit payments and hash memos, and restore purchases, the App sends your wallet's public address to this provider. The provider receives your IP address and that public address. Private keys never leave your wallet. No fallback or alternative RPC provider is used.</li>
             <li><strong>Mobile Wallet Adapter (MWA):</strong> Local device-to-device communication between CallSealSkr and your wallet app. This does not leave your device.</li>
+                    <li><strong>Our analytics endpoint &mdash; callsealskr-analytics.vercel.app:</strong>
+            receives a single event name (for example <code>app_open</code>) and nothing else. No
+            phone number, no message, no proof, no wallet address, no device identifier. Approximate
+            country is derived at the edge from the request; the raw IP is never logged or stored.
+            See &ldquo;Anonymous Analytics&rdquo; below &mdash; you can switch this off in Settings.</li>
         </ul>
         <p>All network communications use HTTPS/TLS encryption in transit. The App enforces HTTPS for all connections and does not permit cleartext traffic.</p>
 
@@ -158,7 +163,10 @@
         <p>The App does not collect or store your IP address. However, when the App makes network requests to Solana RPC endpoints, <strong>your IP address is transmitted to those services</strong> as part of standard internet protocol. MidMightBit Games has no access to any logs or data collected by third-party RPC providers. We encourage you to review their respective privacy policies.</p>
 
         <h2>11. Data Storage and Security</h2>
-        <p>All data is stored locally on your device. No data is transmitted to any server owned or operated by MidMightBit Games. Security measures include:</p>
+        <p>All of your call, message and proof data is stored locally on your device. The only
+        information sent to a server we operate is the anonymous, aggregate usage count described in
+        &ldquo;Anonymous Analytics&rdquo; below &mdash; never your numbers, messages, contacts, proofs
+        or wallet address. Security measures include:</p>
         <ul>
             <li>Wallet public address encrypted with Android EncryptedSharedPreferences (AES-256-GCM values, AES-256-SIV keys), with keys held in the Android Keystore</li>
             <li>Communication records, hashes and app settings held in standard app-private SharedPreferences. These are not additionally encrypted by the App; they are protected by Android's app sandbox and by your device's own full-disk encryption</li>
@@ -166,6 +174,24 @@
             <li>No cloud storage, no server-side databases, no remote backups</li>
             <li><strong>allowBackup</strong> is set to <strong>false</strong> in the App manifest to prevent wallet and hash data from being included in device backups</li>
         </ul>
+
+        <h2>11a. Anonymous Analytics</h2>
+        <p>CallSealSkr reports anonymous, aggregate usage counts to our own endpoint
+        (<strong>callsealskr-analytics.vercel.app</strong>) so we can see which features are used.</p>
+        <p><strong>What is sent:</strong> one event name and nothing else. The whole request body is
+        <code>{"event_type":"app_open"}</code>. Never a phone number, a message, a message preview, a
+        contact, a hash, a proof, a wallet address, a device or advertising identifier, an install id,
+        a session id or an IP address.</p>
+        <p><strong>Purchases are counted too.</strong> The counted event names include purchase outcomes &mdash; that a payment in SOL or SKR was made, that premium was unlocked, or that a purchase was restored. Even for those, the request carries only the event name: <strong>never an amount, a price, a wallet address or a transaction signature</strong>. Your payments are on the public Solana blockchain either way; what we hold is a count, not a link to you.</p>
+        <p><strong>What is stored:</strong> a running count per event, per approximate country, per
+        day. Country comes from the edge; the raw IP is never logged. Because no identifier is ever
+        sent, two events cannot be linked to each other or to you &mdash; so no profile, no session
+        history and no per-user retention can be built from it.</p>
+        <p><strong>Turning it off:</strong> Settings &rarr; Privacy &rarr; &ldquo;Anonymous
+        analytics&rdquo;. When off, nothing is sent at all.</p>
+        <p>Because the data is anonymous and aggregate it is not personal information under the
+        Australian Privacy Act 1988, and is consistent with GDPR (Recital 26), CCPA, LGPD, APPI and
+        PIPA without requiring consent.</p>
 
         <h2>12. No Accounts Created</h2>
         <p>CallSealSkr does not create user accounts. There is no registration, no login system, and no user profiles. Wallet connection via SIWS is optional and used solely for SGT verification and hash recording payments. Disconnecting your wallet removes all wallet-related data from your device.</p>
