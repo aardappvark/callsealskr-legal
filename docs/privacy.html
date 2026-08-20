@@ -39,7 +39,7 @@
         <p class="subtitle"><strong>Effective Date: 12 August 2026</strong></p>
 
         <h2>1. Overview</h2>
-        <p>CallSealSkr ("the App") is published by MidMightBit Games, based in Melbourne, VIC, Australia. The App is a communication verification tool for the Solana Seeker device. It monitors phone calls and SMS messages, creates SHA-256 hashes of communication metadata, and records those hashes on the Solana blockchain as immutable proof that a communication occurred.</p>
+        <p>CallSealSkr ("the App") is published by MidMightBit Games, based in Melbourne, VIC, Australia. The App is a communication verification tool for the Solana Seeker device. It records that a phone call took place &mdash; its direction, timestamp and duration &mdash; creates a SHA-256 hash of that metadata, and records the hash on the Solana blockchain as immutable proof that a call occurred. It does not read your messages, your call log or your contacts, and it does not store the other party's number.</p>
         <p>CallSealSkr is built with privacy as a core principle. We store no communication data in the cloud, we use no third-party analytics or tracking SDKs, and we serve no advertisements. Everything the App records stays on your device. Only two things ever leave it: your wallet's public address, sent to a public Solana RPC provider when you check SGT status, pay, or restore a purchase; and an anonymous, aggregate usage count &mdash; a single event name such as <code>app_open</code> with no identifier of any kind &mdash; sent to an endpoint of ours. Both are described in section 9, the analytics in section 11a, and you can switch the analytics off in Settings &gt; Privacy.</p>
         <p><strong style="color: #FF4444;">Critical Privacy Commitment:</strong> CallSealSkr never captures call audio and never transmits the content of a call or message anywhere. Nothing but a SHA-256 hash is ever sent on-chain, and that hash cannot be reversed to recover the original metadata.</p>
         <p><strong>What is stored on your device:</strong> the App keeps a local log of the communication events it observes. That log holds the phone number (unless you switch "Store phone numbers locally" off) and, for SMS, a preview consisting of the <strong>first 50 characters of the message body</strong> (unless you switch "Store SMS previews" off). Both settings are in Settings &gt; Privacy, where you can also set records to auto-delete after 7, 30 or 90 days. This data never leaves your device.</p>
@@ -100,8 +100,8 @@
         <h2>5. Data We Do NOT Collect</h2>
         <p>"Collect" here means sent to us or to any third party. Nothing in this list is transmitted off your device, and the items in section 4 are stored on your device only.</p>
         <ul>
-            <li>Call audio or voice recordings</li>
-            <li>Full SMS or message bodies (only the first 50 characters are kept, on-device, and only while SMS previews are enabled)</li>
+            <li>Call audio or voice recordings The other party's phone number Your call log Your contacts</li>
+            <li>Any message content &mdash; the App has no access to SMS at all</li>
             <li>Personal information (name, email, address)</li>
             <li>Location data</li>
             <li>Device identifiers</li>
@@ -114,19 +114,22 @@
             <li>Cookies or similar tracking technologies</li>
         </ul>
 
-        <h2>6. Phone and SMS Permissions</h2>
-        <p>CallSealSkr requires the following permissions to function:</p>
+        <h2>6. Phone Permissions</h2>
+        <p>CallSealSkr requests only these permissions:</p>
         <ul>
-            <li><strong>READ_PHONE_STATE</strong> &mdash; to detect incoming and outgoing calls and obtain call metadata (phone number, duration, direction)</li>
-            <li><strong>READ_CALL_LOG</strong> &mdash; to access call history metadata for hash generation</li>
-            <li><strong>RECEIVE_SMS</strong> &mdash; to detect incoming SMS messages and obtain metadata (sender number, timestamp)</li>
-            <li><strong>READ_SMS</strong> &mdash; to read sent messages from the SMS database so outgoing messages can be logged. Sender/recipient, timestamp and type are always read; the first 50 characters of the body are read and stored as a preview while "Store SMS previews" is enabled in Settings.</li>
-            <li><strong>READ_CONTACTS</strong> &mdash; optional. Used only to look up a caller's display name so records show a name instead of a bare number. The lookup happens on your device, contact data is never stored by the App and never leaves the device, and everything still works if you deny this permission.</li>
+            <li><strong>READ_PHONE_STATE</strong> &mdash; to detect that a call has started and ended, so the App can record its direction, timestamp and duration. <strong>The other party's number is never read or stored.</strong></li>
             <li><strong>POST_NOTIFICATIONS</strong> &mdash; to show the ongoing monitoring notification and the hash result alerts you can switch off in Settings &gt; Alerts.</li>
-            <li><strong>FOREGROUND_SERVICE</strong> and <strong>FOREGROUND_SERVICE_SPECIAL_USE</strong> &mdash; to keep the call/SMS monitor running with a visible ongoing notification while monitoring is switched on.</li>
+            <li><strong>FOREGROUND_SERVICE</strong> and <strong>FOREGROUND_SERVICE_SPECIAL_USE</strong> &mdash; to keep the call monitor running with a visible ongoing notification while monitoring is switched on.</li>
             <li><strong>INTERNET</strong> &mdash; to reach the Solana RPC provider named in section 9. The App has no other network destination.</li>
         </ul>
-        <p><strong>Important:</strong> These permissions are used to log communication events and to hash them at your request. The App does not record call audio and does not transmit any raw communication data. Metadata and SMS previews are held on your device only, and you can turn number storage, preview storage and monitoring itself off at any time in Settings.</p>
+        <div class="highlight">
+            <strong>Removed in version 1.3.0.</strong> Earlier versions requested <code>READ_CALL_LOG</code>,
+            <code>RECEIVE_SMS</code>, <code>READ_SMS</code> and <code>READ_CONTACTS</code>. These are gone.
+            The App no longer reads your call log, your messages or your contacts, and no longer records
+            SMS at all. Google Play Protect blocks installation of apps requesting SMS or call-log
+            permissions when they are not distributed through Google Play, so those features could not be
+            offered to you at all &mdash; and removing them means the App now holds far less about you.
+        </div>
 
         <h2>7. Wallet Connection (Optional)</h2>
         <p>CallSealSkr supports optional wallet connection via Sign In With Solana (SIWS) using the Solana Mobile Wallet Adapter (MWA). Wallet connection enables:</p>
@@ -247,7 +250,7 @@
         <p>As the only externally-sourced data is your wallet public address from the Solana blockchain, the App displays factual on-chain data. If you believe any data is inaccurate, you can disconnect and reconnect your wallet to refresh on-chain data.</p>
 
         <h3>Right to Restriction of Processing (GDPR Article 18)</h3>
-        <p>You may restrict the processing of your wallet address at any time by disconnecting your wallet. You may disable call and SMS monitoring at any time to stop metadata processing. This stops all data processing and removes your wallet address from local storage. You may reconnect at any time to resume the service.</p>
+        <p>You may restrict the processing of your wallet address at any time by disconnecting your wallet. You may disable call monitoring at any time to stop metadata processing. This stops all data processing and removes your wallet address from local storage. You may reconnect at any time to resume the service.</p>
 
         <h3>Right to Object</h3>
         <p>You may object to the processing of your wallet address at any time by disconnecting your wallet, which removes your wallet address from local storage. You may object to communication metadata processing by disabling monitoring in the App settings.</p>

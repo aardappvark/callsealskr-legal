@@ -71,7 +71,7 @@
         <p>The App is licensed, not sold. MidMightBit Games and its licensors retain all right, title, and interest in and to the App, including all copyrights, trademarks, trade secrets, and other intellectual property rights. All rights not expressly granted to you in these Terms are reserved. Third-party open-source components remain governed by their own licences, which are listed on the <a href="license.html">Licence &amp; Open Source</a> page.</p>
 
         <h2>2. Description of Service</h2>
-        <p>CallSealSkr is a communication verification application that monitors phone calls and SMS messages, creates SHA-256 hashes of communication metadata, and records those hashes on the Solana blockchain as immutable proof that a communication occurred.</p>
+        <p>CallSealSkr is a communication verification application that records when a phone call takes place, creates SHA-256 hashes of that call metadata, and records those hashes on the Solana blockchain as immutable proof that a communication occurred.</p>
         <p>Key features include:</p>
         <ul>
             <li>SHA-256 hashing of communication metadata (phone number, timestamp, duration, direction)</li>
@@ -81,7 +81,7 @@
             <li>Free hash recording for SGT holders; SOL or SKR payment for others</li>
             <li>Restoring a paid SKR Premium unlock from the blockchain on a new install or device</li>
         </ul>
-        <p><strong style="color: #FF4444;">The App does NOT record call audio and does NOT transmit the content of any call or message.</strong> Only metadata hashes are created and sent on-chain. The App does keep a local log of the events it observes, which includes the other party's phone number and, while SMS previews are enabled in Settings, the first 50 characters of a message. That log stays on your device. See the <a href="privacy.html">Privacy Policy</a> for details.</p>
+        <p><strong style="color: #FF4444;">The App does NOT record call audio and does NOT transmit the content of any call or message.</strong> Only metadata hashes are created and sent on-chain. The App does keep a local log of the calls it observes &mdash; direction, timestamp and duration. As of version 1.3.0 it does not record the other party's number, does not read your call log or contacts, and has no access to SMS. That log stays on your device. See the <a href="privacy.html">Privacy Policy</a> for details.</p>
 
         <h2>3. Nature of Communication Hashes</h2>
         <p>You acknowledge and agree that:</p>
