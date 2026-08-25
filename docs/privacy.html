@@ -36,23 +36,23 @@
         </div>
 
         <h1>Privacy Policy &mdash; Call<span>Seal</span>Skr</h1>
-        <p class="subtitle"><strong>Effective Date: 12 August 2026</strong></p>
+        <p class="subtitle"><strong>Effective Date: 25 August 2026</strong></p>
 
         <h2>1. Overview</h2>
         <p>CallSealSkr ("the App") is published by MidMightBit Games, based in Melbourne, VIC, Australia. The App is a communication verification tool for the Solana Seeker device. It records that a phone call took place &mdash; its direction, timestamp and duration &mdash; creates a SHA-256 hash of that metadata, and records the hash on the Solana blockchain as immutable proof that a call occurred. It does not read your messages, your call log or your contacts, and it does not store the other party's number.</p>
         <p>CallSealSkr is built with privacy as a core principle. We store no communication data in the cloud, we use no third-party analytics or tracking SDKs, and we serve no advertisements. Everything the App records stays on your device. Only two things ever leave it: your wallet's public address, sent to a public Solana RPC provider when you check SGT status, pay, or restore a purchase; and an anonymous, aggregate usage count &mdash; a single event name such as <code>app_open</code> with no identifier of any kind &mdash; sent to an endpoint of ours. Both are described in section 9, the analytics in section 11a, and you can switch the analytics off in Settings &gt; Privacy.</p>
         <p><strong style="color: #FF4444;">Critical Privacy Commitment:</strong> CallSealSkr never captures call audio and never transmits the content of a call or message anywhere. Nothing but a SHA-256 hash is ever sent on-chain, and that hash cannot be reversed to recover the original metadata.</p>
-        <p><strong>What is stored on your device:</strong> the App keeps a local log of the communication events it observes. That log holds the phone number (unless you switch "Store phone numbers locally" off) and, for SMS, a preview consisting of the <strong>first 50 characters of the message body</strong> (unless you switch "Store SMS previews" off). Both settings are in Settings &gt; Privacy, where you can also set records to auto-delete after 7, 30 or 90 days. This data never leaves your device.</p>
+        <p><strong>What is stored on your device:</strong> the App keeps a local log of the communication events it observes. That log holds only the type of call, its timestamp and its duration. It does <strong>not</strong> hold the other party's phone number, which the App discards and never stores. Both settings are in Settings &gt; Privacy, where you can also set records to auto-delete after 7, 30 or 90 days. This data never leaves your device.</p>
 
         <h2>2. Legal Basis for Data Processing</h2>
         <p>Under the EU General Data Protection Regulation (GDPR) and UK GDPR, the legal basis for processing your wallet public address (if you choose to connect a wallet) is <strong>legitimate interest</strong> (Article 6(1)(f)) &mdash; specifically, the legitimate interest in providing SGT verification and hash recording access that you voluntarily opt into by connecting your wallet. This processing is minimal, expected by the user, and proportionate.</p>
-        <p>The legal basis for processing communication metadata to generate hashes is <strong>consent</strong> (Article 6(1)(a)) &mdash; you explicitly enable call and SMS monitoring within the App, and you can disable it at any time.</p>
+        <p>The legal basis for processing communication metadata to generate hashes is <strong>consent</strong> (Article 6(1)(a)) &mdash; you explicitly enable call monitoring within the App, and you can disable it at any time.</p>
         <p>Under the Australian Privacy Act 1988 and Australian Privacy Principles (APPs), the wallet public address is collected in accordance with APP 3 (collection of solicited personal information) for the primary purpose of on-chain identity verification and feature access. Communication metadata processing is covered by APP 3 as information collected for the primary purpose of hash generation at your request.</p>
 
         <h2>3. How Hashing Works</h2>
         <p>When you enable communication monitoring, CallSealSkr processes metadata as follows:</p>
         <ul>
-            <li>Communication metadata (phone number, timestamp, duration, direction) is collected on-device</li>
+            <li>Call metadata (timestamp, duration, direction and a device identifier) is collected on-device</li>
             <li>A SHA-256 hash is computed locally on your device from this metadata</li>
             <li>The hash is a fixed-length, irreversible string &mdash; the original metadata <strong>cannot</strong> be reconstructed from the hash</li>
             <li>Only the hash is submitted to the Solana blockchain via the Memo Program</li>
@@ -64,16 +64,14 @@
 
         <h3>Communication Records (Local Only)</h3>
         <ul>
-            <li>Type of event (incoming, outgoing, missed or rejected call; sent or received SMS), and its timestamp and duration</li>
-            <li>The other party's phone number, unless "Store phone numbers locally" is switched off</li>
-            <li>For SMS, the first 50 characters of the message body, unless "Store SMS previews" is switched off</li>
+            <li>Type of event (incoming, outgoing, missed or rejected call), and its timestamp and duration</li>
             <li>Up to 500 of the most recent records; older records are dropped, and you can set them to auto-delete after 7, 30 or 90 days</li>
             <li>Stored in standard (unencrypted) app-private SharedPreferences, readable only by CallSealSkr under Android's app sandbox</li>
         </ul>
 
         <h3>Communication Hashes (Local Only)</h3>
         <ul>
-            <li>SHA-256 hashes of communication metadata, and the random salt used to produce each one</li>
+            <li>SHA-256 hashes of call metadata, and the random salt used to produce each one</li>
             <li>On-chain transaction signatures for recorded hashes</li>
             <li>The wallet address and device fingerprint recorded with each proof</li>
             <li>Stored in standard (unencrypted) app-private SharedPreferences on your device</li>
@@ -82,7 +80,6 @@
         <h3>App Settings (Local Only)</h3>
         <ul>
             <li>Call monitoring enabled/disabled preference</li>
-            <li>SMS monitoring enabled/disabled preference</li>
             <li>Auto-hash preference (automatic vs. manual hash recording)</li>
             <li>Notification preferences</li>
             <li>Purchased hash credits and whether SKR Premium has been unlocked</li>
@@ -140,7 +137,7 @@
         <p>The MWA protocol operates locally between apps on your device. No wallet data is transmitted to external servers by MidMightBit Games. We store only your wallet public address (encrypted). We never have access to your private keys or the ability to sign transactions on your behalf without your explicit approval in your wallet app.</p>
 
         <h2>8. Payments and Transactions</h2>
-        <p>CallSealSkr charges <strong>0.01 SOL</strong> or <strong>0.01 SKR</strong> for one hash credit (one credit = one record hashed on-chain), and <strong>0.10 SKR</strong> as a one-off for SKR Premium, which unlocks automatic hashing without per-hash credits. Seeker Genesis Token holders hash for free and need neither. These transactions are processed entirely on the Solana blockchain:</p>
+        <p>CallSealSkr charges <strong>0.063 SOL</strong> or <strong>660 SKR</strong> for one hash credit (one credit = one record hashed on-chain), and <strong>660 SKR</strong> as a one-off for SKR Premium, which unlocks automatic hashing without per-hash credits. Seeker Genesis Token holders hash for free and need neither. These transactions are processed entirely on the Solana blockchain:</p>
         <ul>
             <li>You approve each transaction individually in your wallet app</li>
             <li>Each payment carries a CallSealSkr-specific reference account so that only your CallSealSkr payments can restore a CallSealSkr entitlement</li>
@@ -166,7 +163,7 @@
         <p>The App does not collect or store your IP address. However, when the App makes network requests to Solana RPC endpoints, <strong>your IP address is transmitted to those services</strong> as part of standard internet protocol. MidMightBit Games has no access to any logs or data collected by third-party RPC providers. We encourage you to review their respective privacy policies.</p>
 
         <h2>11. Data Storage and Security</h2>
-        <p>All of your call, message and proof data is stored locally on your device. The only
+        <p>All of your call and proof data is stored locally on your device. The only
         information sent to a server we operate is the anonymous, aggregate usage count described in
         &ldquo;Anonymous Analytics&rdquo; below &mdash; never your numbers, messages, contacts, proofs
         or wallet address. Security measures include:</p>
@@ -330,7 +327,84 @@
         Email: <a href="mailto:aardappvark@proton.me">aardappvark@proton.me</a></p>
         <p>We aim to respond to all data protection requests within 30 days.</p>
 
-        <div class="footer">
+        
+<!-- eu-gdpr-block v1 -->
+<h2>European Union and EEA Users &mdash; GDPR</h2>
+<p>This section applies if you are in the European Union or the European Economic Area, and explains
+how Regulation (EU) 2016/679 (GDPR) applies to CallSealSkr.</p>
+
+<h3>Controller</h3>
+<p>MidMightBit Games, a sole trader established in Australia, is the data controller. Contact:
+<a href="mailto:aardappvark@proton.me">aardappvark@proton.me</a>. We have not appointed a Data Protection Officer; we are not
+required to.</p>
+
+<h3>Representative in the Union (Article 27)</h3>
+<p>We have not designated a representative in the Union. We rely on the exemption in Article 27(2)(a):
+our processing of EU personal data is occasional, does not include large-scale processing of special
+categories of data under Article 9 or data relating to criminal convictions under Article 10, and is
+unlikely to result in a risk to the rights and freedoms of natural persons. You can contact us
+directly at <a href="mailto:aardappvark@proton.me">aardappvark@proton.me</a> about any GDPR matter, and we answer in English.</p>
+
+<h3>What we process, and on what legal basis</h3>
+<ul>
+<li><strong>Data held on your device</strong> (your settings, your content, and any wallet public
+address you connect) &mdash; processed to perform the contract with you, Article 6(1)(b). This stays
+in app-private storage on your device. We do not receive it and cannot read it.</li>
+<li><strong>Anonymous usage counts</strong> &mdash; an event name, with an approximate country derived
+at the network edge, aggregated per day. Basis: our legitimate interest in understanding how many people use the App and roughly where (Article 6(1)(f)), which you can object to at any time using the control in the App's Settings screen. Because the counts carry no
+identifier and cannot be linked to you or to each other, we treat the stored result as anonymous
+statistical data within the meaning of Recital 26.</li>
+<li><strong>Sanctions and region screening</strong> &mdash; carried out on your device to comply with
+legal obligations to which we are subject, Article 6(1)(c), and our legitimate interest in not
+supplying restricted jurisdictions, Article 6(1)(f). The result is a yes or no evaluated on your
+device; it is not stored by us and never transmitted.</li>
+<li><strong>Blockchain interactions</strong> &mdash; if you connect a wallet or make a payment, your
+wallet's public address is sent to public Solana RPC providers to read on-chain state or submit your
+signed transaction. That is necessary to perform the contract, Article 6(1)(b). Anything you write to
+a public blockchain is permanent, public, and outside our control &mdash; it cannot be erased or
+rectified by us or by anyone.</li>
+</ul>
+<p>You can stop this processing at any time from the App's Settings screen, where the privacy section carries the control. Turning it off stops all event sending immediately.</p>
+
+<h3>Storage on and access to your device (ePrivacy, Article 5(3))</h3>
+<p>CallSealSkr stores settings on your device using Android's app-private storage. That storage is strictly
+necessary to provide the service you asked for, so it does not require separate consent. The App sets
+no cookies, uses no advertising identifier, no device fingerprinting and no third-party analytics SDK,
+and does not read information stored on your device for any purpose other than running the App.</p>
+
+<h3>Transfers outside the EEA</h3>
+<p>We are established in Australia, so where we receive anything it is processed in Australia.
+Australia is not the subject of an adequacy decision under Article 45. Our analytics endpoint is
+operated for us in the United States by our hosting provider. The transferred payload is a single
+event name and contains no identifier and no personal data, so in our assessment Chapter V is not
+engaged by it; to the extent it is, we rely on Article 46(2)(c) standard contractual clauses with our
+provider, or the EU&ndash;US Data Privacy Framework where that provider is certified. Public Solana RPC
+providers you interact with may be located outside the EEA and receive your IP address and wallet
+public address as an unavoidable part of any internet request.</p>
+
+<h3>Retention</h3>
+<p>Data on your device is kept until you delete it, clear the App's data, or uninstall the App.
+Aggregate daily counters hold no personal data and are kept indefinitely as statistics. We operate no
+user accounts and hold no profile of you.</p>
+
+<h3>Your rights</h3>
+<p>You have the rights of access (Article 15), rectification (16), erasure (17), restriction (18),
+data portability (20) and objection (21), and the right to withdraw consent at any time where consent
+is the basis. Because your data lives on your device and we hold no identifier for you, you exercise
+most of these directly: the data is visible in the App, and clearing the App's data or uninstalling it
+erases it. For anything else, email <a href="mailto:aardappvark@proton.me">aardappvark@proton.me</a> &mdash; we respond within one
+month, free of charge.</p>
+<p>There is no automated decision-making producing legal or similarly significant effects, and no
+profiling within the meaning of Article 22.</p>
+
+<h3>Complaints</h3>
+<p>You have the right to lodge a complaint with the supervisory authority of your Member State of
+residence, place of work, or of the alleged infringement (Article 77). A list is published by the
+European Data Protection Board at
+<a href="https://www.edpb.europa.eu/about-edpb/about-edpb/members_en">edpb.europa.eu</a>. We would
+appreciate the chance to resolve it first.</p>
+
+<div class="footer">
             <p>&copy; 2026 MidMightBit Games. Melbourne, VIC, Australia.</p>
             <p style="margin-top: 8px;">
                 <a href="privacy.html">Privacy</a> &middot;
